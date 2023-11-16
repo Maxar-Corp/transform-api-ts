@@ -14,7 +14,8 @@
   "scripts": {
     "clean": "tsc --build --clean",
     "build": "tsc",
-    "test": "export $(cat .env | xargs) && yarn build && node --test"
+    "test": "export $(cat .env | xargs) && yarn build && node --test",
+    "prepare": "npm run build"
   },
   "devDependencies": {
     "@types/node": "^20.9.0",
