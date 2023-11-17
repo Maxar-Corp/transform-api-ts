@@ -30,7 +30,7 @@ export interface TransformProblem {
      * @type {string}
      * @memberof TransformProblem
      */
-    type: string;
+    type?: string;
     /**
      * 
      * @type {string}
@@ -62,7 +62,6 @@ export interface TransformProblem {
  */
 export function instanceOfTransformProblem(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "type" in value;
     isInstance = isInstance && "title" in value;
     isInstance = isInstance && "status" in value;
     isInstance = isInstance && "detail" in value;
@@ -70,6 +69,16 @@ export function instanceOfTransformProblem(value: object): boolean {
 
     return isInstance;
 }
+
+export function instanceOfGenericTransformProblem(value: object): boolean {
+    let isInstance = true;
+    isInstance = isInstance && "code" in value;
+    isInstance = isInstance && "description" in value;
+    isInstance = isInstance && "request-id" in value;
+
+    return isInstance;
+}
+
 
 export function TransformProblemFromJSON(json: any): TransformProblem {
     return TransformProblemFromJSONTyped(json, false);
@@ -79,14 +88,35 @@ export function TransformProblemFromJSONTyped(json: any, ignoreDiscriminator: bo
     if ((json === undefined) || (json === null)) {
         return json;
     }
+    if(instanceOfTransformProblem(json))
+    {
+        const prob = {
+            'title': json['title'],
+            'status': StatusTypeFromJSON(json['status']),
+            'detail': json['detail'],
+            'parameters': json['parameters'],
+        };
+
+        if(!!json['type']) prob['type'] = json['type'];
+        return prob;
+    }
+    else if(instanceOfGenericTransformProblem(json)){
+        return {
+
+            'title': json['description'],
+            'status': StatusTypeFromJSON(json['code']),
+            'detail': json['description'],
+            'parameters':  { 'correlationId' : json['request-id'] },
+        };
+    }
     return {
-        
-        'type': json['type'],
-        'title': json['title'],
-        'status': StatusTypeFromJSON(json['status']),
-        'detail': json['detail'],
-        'parameters': json['parameters'],
+
+        'title': '',
+        'status':  {},
+        'detail': JSON.stringify(json),
+        'parameters':  { },
     };
+
 }
 
 export function TransformProblemToJSON(value?: TransformProblem | null): any {
@@ -98,7 +128,7 @@ export function TransformProblemToJSON(value?: TransformProblem | null): any {
     }
     return {
         
-        'type': value.type,
+        'type': value?.type,
         'title': value.title,
         'status': StatusTypeToJSON(value.status),
         'detail': value.detail,
