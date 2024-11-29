@@ -1,6 +1,6 @@
 {
   "name": "@maxar/transform-api",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "description": "OpenAPI client for @maxar/transform-api",
   "author": "jerry.rumbolt@maxar.com",
@@ -14,12 +14,12 @@
   "scripts": {
     "clean": "tsc --build --clean",
     "build": "tsc",
-    "test": "export $(cat .env | xargs) && yarn build && node --test",
+    "test": "export $(cat .env | xargs) && npm run build && node --test",
     "prepare": "npm run build"
   },
   "devDependencies": {
-    "@types/node": "^20.9.0",
-    "typescript": "^5.2.2"
+    "@types/node": "^22.10.1",
+    "typescript": "^5.7.2"
   },
   "publishConfig": {
     "access": "public"

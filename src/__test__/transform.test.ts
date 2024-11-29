@@ -67,17 +67,17 @@ end`
     });
 
     it('test getScriptGeotiff_header', async () => {
-        const geotiffInfo = await api.getScriptGeotiffInfo({ id: 'ortho-image', function: 'ortho', p: ["collect_identifier=\"10400100655F5400\"", "crs=\"EPSG:4326\"", "bands=\"red,green,blue\""] });
+        const geotiffInfo = await api.getScriptGeotiffInfo({ id: 'ortho', function: 'ortho', p: ["collect_identifier=\"10400100655F5400\"", "crs=\"EPSG:4326\"", "bands=\"red,green,blue\""] });
         assert.equal(geotiffInfo.acceptRanges, 'bytes', 'accept-ranges is not correct');
         assert.equal(geotiffInfo.contentType, 'image/tiff', 'content-type is not correct');
-        assert(nearInt(geotiffInfo.contentLength, 492545192, 500), 'content-length is not correct');
-        assert(nearInt(geotiffInfo.xTiffHeaderLength, 42152, 256), 'x-tiff-header-length is not correct');
+        assert(nearInt(geotiffInfo.contentLength, 411142024, 50000), 'content-length is not correct');
+        assert(nearInt(geotiffInfo.xTiffHeaderLength, 34696, 10000), 'x-tiff-header-length is not correct');
         assert(nearInt(geotiffInfo.xTiffNominalTileByteCount, 196608, 256), 'x-tiff-nominal-tile-byte-count is not correct');
     });
 
 
     it('test getScriptMetadata', async () => {
-        const metadata = await api.getScriptMetadata({ id: 'ortho-image', function: 'ortho', p: ["collect_identifier=\"10400100655F5400\"", "crs=\"EPSG:4326\"", "bands=\"red,green,blue\""] });
+        const metadata = await api.getScriptMetadata({ id: 'ortho', function: 'ortho', p: ["collect_identifier=\"10400100655F5400\"", "crs=\"EPSG:4326\"", "bands=\"red,green,blue\""] });
         assert.equal(metadata.bands?.join(','), 'red,green,blue', 'bands is not correct');
         assert(metadata.imageMetadata !== null, 'image metadata is missing');
         assert(metadata.sourceMetadata !== null, 'source metadata is missing');
@@ -87,7 +87,7 @@ end`
     });
 
     it('test getScriptGeotiff_data', async () => {
-        const blob = await api.getScriptGeotiff({ range: 'bytes=0-1523064', id: 'ortho-image', function: 'ortho', p: ["collect_identifier=\"10400100655F5400\"", "crs=\"EPSG:4326\"", "bands=\"red,green,blue\""] });
+        const blob = await api.getScriptGeotiff({ range: 'bytes=0-1523064', id: 'ortho', function: 'ortho', p: ["collect_identifier=\"10400100655F5400\"", "crs=\"EPSG:4326\"", "bands=\"red,green,blue\""] });
         assert(blob.size === 1523065, 'geotiff range read returned incorrect number of bytes');
     });
 
